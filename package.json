@@ -1,0 +1,13 @@
+{
+  "name": "memorymatch",
+  "private": true,
+  "packageManager": "pnpm@10.30.3",
+  "engines": { "node": ">=22" },
+  "pnpm": { "onlyBuiltDependencies": ["esbuild"] },
+  "scripts": {
+    "dev": "pnpm --filter @memorymatch/web dev",
+    "build": "pnpm --filter @memorymatch/web build",
+    "preview": "pnpm --filter @memorymatch/web preview",
+    "typecheck": "pnpm --filter @memorymatch/web exec tsc -b"
+  }
+}
