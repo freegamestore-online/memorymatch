@@ -12,7 +12,7 @@ export function useGrid<T>(rows: number, cols: number, init: () => T) {
   const setCell = useCallback((r: number, c: number, value: T) => {
     setGrid((prev) => {
       const next = prev.map((row) => [...row]);
-      next[r][c] = value;
+      next[r]![c] = value;
       return next;
     });
   }, []);
