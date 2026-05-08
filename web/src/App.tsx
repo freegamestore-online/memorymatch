@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { GameShell, GameTopbar } from "@freeappstore/games";
+import { GameShell, GameTopbar } from "@freegamestore/games";
 
 const SYMBOLS = ["★", "●", "▲", "■", "♠", "♥", "♦", "♣"] as const;
 
