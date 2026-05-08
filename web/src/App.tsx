@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { GameShell, GameTopbar } from "@freegamestore/games";
+import { GameShell, GameTopbar, GameAuth } from "@freegamestore/games";
 
 const SYMBOLS = ["★", "●", "▲", "■", "♠", "♥", "♦", "♣"] as const;
 
@@ -94,6 +94,7 @@ export default function App() {
             { label: "Moves", value: moves },
             { label: "Time", value: `${elapsedSec}s` },
           ]}
+          actions={<GameAuth />}
         />
       }
     >
