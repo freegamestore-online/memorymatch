@@ -95,6 +95,7 @@ export default function App() {
             { label: "Time", value: `${elapsedSec}s` },
           ]}
           actions={<GameAuth />}
+          rules={<div><h3 style={{fontWeight:700}}>Memory Match</h3><h4 style={{fontWeight:600}}>Rules</h4><ul><li>Flip cards to find matching pairs</li><li>Match all pairs to win</li><li>Moves and time are tracked</li><li>Fewer moves = better</li></ul></div>}
         />
       }
     >
