@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Shell } from "./components/Shell";
+import { GameShell, GameTopbar } from "@freeappstore/games";
 
 const SYMBOLS = ["★", "●", "▲", "■", "♠", "♥", "♦", "♣"] as const;
 
@@ -86,142 +86,109 @@ export default function App() {
   const elapsedSec = startedAt ? Math.floor((now - startedAt) / 1000) : 0;
 
   return (
-    <Shell>
-      <div style={{ maxWidth: "520px", margin: "0 auto", padding: "1.5rem 0" }}>
-        <h1
-          style={{
-            fontFamily: "Fraunces, serif",
-            fontSize: "1.75rem",
-            fontWeight: 800,
-            marginBottom: "0.25rem",
-            textAlign: "center",
-          }}
-        >
-          Memory match
-        </h1>
-        <p
-          style={{
-            color: "var(--muted)",
-            marginBottom: "1.5rem",
-            textAlign: "center",
-          }}
-        >
-          Flip two tiles. Find every pair.
-        </p>
-
-        <div style={{ display: "flex", gap: "1.5rem", justifyContent: "center", marginBottom: "1.25rem" }}>
-          <Stat label="Moves" value={moves} />
-          <Stat label="Time" value={`${elapsedSec}s`} />
-        </div>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: "0.6rem",
-          }}
-        >
-          {tiles.map((t) => {
-            const open = t.matched || flipped.includes(t.id);
-            return (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => flip(t.id)}
-                aria-label={open ? `${t.symbol} (open)` : "tile"}
-                style={{
-                  aspectRatio: "1 / 1",
-                  border: "1px solid var(--line-strong)",
-                  borderRadius: "0.6rem",
-                  background: open ? "var(--paper)" : "var(--panel)",
-                  fontFamily: "inherit",
-                  fontSize: "1.8rem",
-                  fontWeight: 700,
-                  color: t.matched ? "var(--accent)" : "var(--ink)",
-                  cursor: open || won ? "default" : "pointer",
-                  transition: "background 0.18s, color 0.18s",
-                }}
-              >
-                {open ? t.symbol : ""}
-              </button>
-            );
-          })}
-        </div>
-
-        {won && (
+    <GameShell
+      topbar={
+        <GameTopbar
+          title="Memory Match"
+          stats={[
+            { label: "Moves", value: moves },
+            { label: "Time", value: `${elapsedSec}s` },
+          ]}
+        />
+      }
+    >
+      <div className="relative w-full h-full">
+        <div style={{ maxWidth: "520px", margin: "0 auto", padding: "1.5rem 0" }}>
           <div
             style={{
-              marginTop: "1.5rem",
-              padding: "1rem",
-              border: "1px solid var(--line)",
-              borderRadius: "0.5rem",
-              textAlign: "center",
+              display: "grid",
+              gridTemplateColumns: "repeat(4, 1fr)",
+              gap: "0.6rem",
             }}
           >
-            <p style={{ fontWeight: 600 }}>
-              Cleared in {moves} moves, {elapsedSec}s. 🎉
-            </p>
-            <button
-              type="button"
-              onClick={reset}
-              style={{
-                marginTop: "0.6rem",
-                background: "var(--accent)",
-                color: "white",
-                border: 0,
-                padding: "0.6rem 1.5rem",
-                borderRadius: "0.5rem",
-                fontFamily: "inherit",
-                fontWeight: 700,
-                cursor: "pointer",
-              }}
-            >
-              Play again
-            </button>
+            {tiles.map((t) => {
+              const open = t.matched || flipped.includes(t.id);
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => flip(t.id)}
+                  aria-label={open ? `${t.symbol} (open)` : "tile"}
+                  style={{
+                    aspectRatio: "1 / 1",
+                    border: "1px solid var(--line-strong)",
+                    borderRadius: "0.6rem",
+                    background: open ? "var(--paper)" : "var(--panel)",
+                    fontFamily: "inherit",
+                    fontSize: "1.8rem",
+                    fontWeight: 700,
+                    color: t.matched ? "var(--accent)" : "var(--ink)",
+                    cursor: open || won ? "default" : "pointer",
+                    transition: "background 0.18s, color 0.18s",
+                  }}
+                >
+                  {open ? t.symbol : ""}
+                </button>
+              );
+            })}
           </div>
-        )}
 
-        {!won && moves > 0 && (
-          <div style={{ textAlign: "center", marginTop: "1rem" }}>
-            <button
-              type="button"
-              onClick={reset}
+          {won && (
+            <div
               style={{
-                background: "transparent",
-                color: "var(--muted)",
+                marginTop: "1.5rem",
+                padding: "1rem",
                 border: "1px solid var(--line)",
-                padding: "0.5rem 1.2rem",
                 borderRadius: "0.5rem",
-                fontFamily: "inherit",
-                fontWeight: 600,
-                fontSize: "0.85rem",
-                cursor: "pointer",
+                textAlign: "center",
               }}
             >
-              Restart
-            </button>
-          </div>
-        )}
-      </div>
-    </Shell>
-  );
-}
+              <p style={{ fontWeight: 600 }}>
+                Cleared in {moves} moves, {elapsedSec}s.
+              </p>
+              <button
+                type="button"
+                onClick={reset}
+                style={{
+                  marginTop: "0.6rem",
+                  background: "var(--accent)",
+                  color: "white",
+                  border: 0,
+                  padding: "0.6rem 1.5rem",
+                  borderRadius: "0.5rem",
+                  fontFamily: "inherit",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                Play again
+              </button>
+            </div>
+          )}
 
-function Stat({ label, value }: { label: string; value: number | string }) {
-  return (
-    <div style={{ textAlign: "center" }}>
-      <div style={{ fontFamily: "Fraunces, serif", fontSize: "1.4rem", fontWeight: 700 }}>{value}</div>
-      <div
-        style={{
-          color: "var(--muted)",
-          fontSize: "0.7rem",
-          textTransform: "uppercase",
-          letterSpacing: "0.1em",
-          fontWeight: 600,
-        }}
-      >
-        {label}
+          {!won && moves > 0 && (
+            <div style={{ textAlign: "center", marginTop: "1rem" }}>
+              <button
+                type="button"
+                onClick={reset}
+                style={{
+                  background: "transparent",
+                  color: "var(--muted)",
+                  border: "1px solid var(--line)",
+                  padding: "0.5rem 1.2rem",
+                  borderRadius: "0.5rem",
+                  fontFamily: "inherit",
+                  fontWeight: 600,
+                  fontSize: "0.85rem",
+                  cursor: "pointer",
+                }}
+              >
+                Restart
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </GameShell>
   );
 }
