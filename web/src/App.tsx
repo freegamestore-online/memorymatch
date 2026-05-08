@@ -97,97 +97,98 @@ export default function App() {
         />
       }
     >
-      <div className="relative w-full h-full">
-        <div style={{ maxWidth: "520px", margin: "0 auto", padding: "1.5rem 0" }}>
+      <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden p-2">
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, min(22vw, calc((100svh - 5rem) / 4.6), 120px))",
+            gridTemplateRows: "repeat(4, min(22vw, calc((100svh - 5rem) / 4.6), 120px))",
+            gap: "clamp(0.3rem, 1.2vmin, 0.6rem)",
+            justifyContent: "center",
+          }}
+        >
+          {tiles.map((t) => {
+            const open = t.matched || flipped.includes(t.id);
+            return (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => flip(t.id)}
+                aria-label={open ? `${t.symbol} (open)` : "tile"}
+                style={{
+                  aspectRatio: "1 / 1",
+                  border: "1px solid var(--line-strong)",
+                  borderRadius: "0.6rem",
+                  background: open ? "var(--paper)" : "var(--panel)",
+                  fontFamily: "inherit",
+                  fontSize: "clamp(1rem, 5vmin, 1.8rem)",
+                  fontWeight: 700,
+                  color: t.matched ? "var(--accent)" : "var(--ink)",
+                  cursor: open || won ? "default" : "pointer",
+                  transition: "background 0.18s, color 0.18s",
+                }}
+              >
+                {open ? t.symbol : ""}
+              </button>
+            );
+          })}
+        </div>
+
+        {won && (
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: "0.6rem",
+              marginTop: "0.75rem",
+              padding: "0.6rem 1rem",
+              border: "1px solid var(--line)",
+              borderRadius: "0.5rem",
+              textAlign: "center",
             }}
           >
-            {tiles.map((t) => {
-              const open = t.matched || flipped.includes(t.id);
-              return (
-                <button
-                  key={t.id}
-                  type="button"
-                  onClick={() => flip(t.id)}
-                  aria-label={open ? `${t.symbol} (open)` : "tile"}
-                  style={{
-                    aspectRatio: "1 / 1",
-                    border: "1px solid var(--line-strong)",
-                    borderRadius: "0.6rem",
-                    background: open ? "var(--paper)" : "var(--panel)",
-                    fontFamily: "inherit",
-                    fontSize: "1.8rem",
-                    fontWeight: 700,
-                    color: t.matched ? "var(--accent)" : "var(--ink)",
-                    cursor: open || won ? "default" : "pointer",
-                    transition: "background 0.18s, color 0.18s",
-                  }}
-                >
-                  {open ? t.symbol : ""}
-                </button>
-              );
-            })}
-          </div>
-
-          {won && (
-            <div
+            <p style={{ fontWeight: 600, fontSize: "0.9rem", margin: 0 }}>
+              Cleared in {moves} moves, {elapsedSec}s.
+            </p>
+            <button
+              type="button"
+              onClick={reset}
               style={{
-                marginTop: "1.5rem",
-                padding: "1rem",
-                border: "1px solid var(--line)",
+                marginTop: "0.4rem",
+                background: "var(--accent)",
+                color: "white",
+                border: 0,
+                padding: "0.4rem 1.2rem",
                 borderRadius: "0.5rem",
-                textAlign: "center",
+                fontFamily: "inherit",
+                fontWeight: 700,
+                fontSize: "0.85rem",
+                cursor: "pointer",
               }}
             >
-              <p style={{ fontWeight: 600 }}>
-                Cleared in {moves} moves, {elapsedSec}s.
-              </p>
-              <button
-                type="button"
-                onClick={reset}
-                style={{
-                  marginTop: "0.6rem",
-                  background: "var(--accent)",
-                  color: "white",
-                  border: 0,
-                  padding: "0.6rem 1.5rem",
-                  borderRadius: "0.5rem",
-                  fontFamily: "inherit",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                }}
-              >
-                Play again
-              </button>
-            </div>
-          )}
+              Play again
+            </button>
+          </div>
+        )}
 
-          {!won && moves > 0 && (
-            <div style={{ textAlign: "center", marginTop: "1rem" }}>
-              <button
-                type="button"
-                onClick={reset}
-                style={{
-                  background: "transparent",
-                  color: "var(--muted)",
-                  border: "1px solid var(--line)",
-                  padding: "0.5rem 1.2rem",
-                  borderRadius: "0.5rem",
-                  fontFamily: "inherit",
-                  fontWeight: 600,
-                  fontSize: "0.85rem",
-                  cursor: "pointer",
-                }}
-              >
-                Restart
-              </button>
-            </div>
-          )}
-        </div>
+        {!won && moves > 0 && (
+          <div style={{ textAlign: "center", marginTop: "0.5rem" }}>
+            <button
+              type="button"
+              onClick={reset}
+              style={{
+                background: "transparent",
+                color: "var(--muted)",
+                border: "1px solid var(--line)",
+                padding: "0.35rem 1rem",
+                borderRadius: "0.5rem",
+                fontFamily: "inherit",
+                fontWeight: 600,
+                fontSize: "0.8rem",
+                cursor: "pointer",
+              }}
+            >
+              Restart
+            </button>
+          </div>
+        )}
       </div>
     </GameShell>
   );
