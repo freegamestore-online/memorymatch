@@ -99,13 +99,13 @@ export default function App() {
         />
       }
     >
-      <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden p-2">
+      <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden p-1 sm:p-2">
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(4, min(22vw, calc((100svh - 5rem) / 4.6), 120px))",
-            gridTemplateRows: "repeat(4, min(22vw, calc((100svh - 5rem) / 4.6), 120px))",
-            gap: "clamp(0.3rem, 1.2vmin, 0.6rem)",
+            gridTemplateColumns: "repeat(4, min(20vw, calc((100svh - 6rem) / 5), 120px))",
+            gridTemplateRows: "repeat(4, min(20vw, calc((100svh - 6rem) / 5), 120px))",
+            gap: "clamp(0.2rem, 1vmin, 0.5rem)",
             justifyContent: "center",
           }}
         >
