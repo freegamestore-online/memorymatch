@@ -19,6 +19,6 @@
 - Must fit all viewports 320x568 to 1366x1024
 
 ## Docs
-- Full guide: https://raw.githubusercontent.com/freeappstore-online/ops/main/SKILLS.md
+- Full guide: https://raw.githubusercontent.com/freeappstore-online/freeappstore/main/SKILLS.md
 - Store: ~/dev/fgs/platform/freegamestore/
 - Auditor: ~/dev/fgs/platform/auditor/
