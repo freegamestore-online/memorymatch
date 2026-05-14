@@ -20,5 +20,4 @@
 
 ## Docs
 - Full guide: https://raw.githubusercontent.com/freeappstore-online/freeappstore/main/SKILLS.md
-- Store: ~/dev/fgs/platform/freegamestore/
-- Auditor: ~/dev/fgs/platform/auditor/
+- Store: ~/dev/fgs/freegamestore/
