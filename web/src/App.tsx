@@ -1,5 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
-import { GameShell, GameTopbar, GameAuth } from "@freegamestore/games";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { GameShell, GameTopbar, GameAuth, useGameSounds } from "@freegamestore/games";
+
+type SoundsApi = ReturnType<typeof useGameSounds>;
+
+function AudioBridge({ apiRef }: { apiRef: React.MutableRefObject<SoundsApi | null> }) {
+  const sounds = useGameSounds();
+  apiRef.current = sounds;
+  return null;
+}
 
 const SYMBOLS = ["★", "●", "▲", "■", "♠", "♥", "♦", "♣"] as const;
 
@@ -29,8 +37,20 @@ export default function App() {
   const [moves, setMoves] = useState(0);
   const [startedAt, setStartedAt] = useState<number | null>(null);
   const [now, setNow] = useState(Date.now());
+  const audioRef = useRef<SoundsApi | null>(null);
 
   const won = useMemo(() => tiles.every((t) => t.matched), [tiles]);
+
+  // Play a one-shot level-up sound when the player wins.
+  const wonRef = useRef(false);
+  useEffect(() => {
+    if (won && !wonRef.current) {
+      wonRef.current = true;
+      audioRef.current?.playLevelUp();
+    } else if (!won) {
+      wonRef.current = false;
+    }
+  }, [won]);
 
   // Timer ticks while a game is in progress.
   useEffect(() => {
@@ -48,6 +68,7 @@ export default function App() {
     const tb = tiles.find((t) => t.id === b);
     if (ta && tb && ta.symbol === tb.symbol) {
       // Match — keep both face-up, mark as matched.
+      audioRef.current?.playClear();
       const id = window.setTimeout(() => {
         setTiles((prev) =>
           prev.map((t) => (t.id === a || t.id === b ? { ...t, matched: true } : t)),
@@ -57,6 +78,7 @@ export default function App() {
       return () => window.clearTimeout(id);
     } else {
       // No match — flip both back after a beat.
+      audioRef.current?.playError();
       const id = window.setTimeout(() => setFlipped([]), 750);
       return () => window.clearTimeout(id);
     }
@@ -68,6 +90,7 @@ export default function App() {
     if (flipped.length === 2) return; // wait for resolution
     if (tiles.find((t) => t.id === id)?.matched) return;
     if (startedAt === null) setStartedAt(Date.now());
+    audioRef.current?.playTick();
     setFlipped((prev) => {
       const next = [...prev, id];
       if (next.length === 2) setMoves((m) => m + 1);
@@ -99,6 +122,7 @@ export default function App() {
         />
       }
     >
+      <AudioBridge apiRef={audioRef} />
       <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden p-1 sm:p-2">
         <div
           style={{
