@@ -69,6 +69,10 @@ describe("FreeGameStore compliance", () => {
     it("does NOT have old manifest.json link", () => {
       expect(html).not.toContain('href="/manifest.json"');
     });
+
+    it("titles the page with the game and store name", () => {
+      expect(html).toContain("<title>Memory Match — FreeGameStore</title>");
+    });
   });
 
   describe("vite.config", () => {
